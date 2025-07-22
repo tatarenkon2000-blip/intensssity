@@ -154,9 +154,25 @@ var hoverEffect = function(opts) {
         addEvents();
     }
 
-    window.addEventListener("resize", function(e) {
-        renderer.setSize(parent.offsetWidth, parent.offsetHeight);
-    });
+    window.addEventListener("resize", function () {
+    const width = parent.offsetWidth;
+    const height = parent.offsetHeight;
+
+    // Update renderer size
+    renderer.setSize(width, height);
+
+    // Update camera
+    camera.left = width / -2;
+    camera.right = width / 2;
+    camera.top = height / 2;
+    camera.bottom = height / -2;
+    camera.updateProjectionMatrix();
+
+    // Update plane geometry
+    object.geometry.dispose(); // Dispose old geometry to prevent memory leak
+    object.geometry = new THREE.PlaneBufferGeometry(width, height, 1);
+});
+
 
 
     this.next = function(){
